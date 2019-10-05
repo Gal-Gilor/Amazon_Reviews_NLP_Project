@@ -81,7 +81,7 @@ def lem_words(list_of_tokens, lemmatizer):
     return " ".join(wrd_list)
 
 
-def finalize_token(reviews):
+def finalize_token(reviews, final_stopwords):
     """
     finalize_token(reviews):
     Returns the final corpus of reviews
