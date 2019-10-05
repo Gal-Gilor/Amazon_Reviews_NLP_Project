@@ -48,7 +48,7 @@ def clean_review(review):
     return joined_clean_review
 
 
-def get_tokens(clean_review):
+def get_tokens(clean_review, final_stopwords):
     
     """ 
     get_tokens(clean_review):
@@ -66,7 +66,7 @@ def get_tokens(clean_review):
     return list_of_tokens
 
 
-def lem_words(list_of_tokens,lemmatizer):
+def lem_words(list_of_tokens, lemmatizer):
     """
     lem_words(list_of_tokens, lemmatizer):
     Returns the lemmas of each token
@@ -92,9 +92,9 @@ def finalize_token(reviews):
     """
     corpus = []
     for review in tqdm(reviews):
-        clean = clean_review(review)
+        clean = clean_review(review, final_stopwords)
         tokens = get_tokens(clean)
-        lemmas = lem_words(tokens,lemmatizer)
+        lemmas = lem_words(tokens, lemmatizer)
         corpus.append(lemmas)
     return corpus
 
