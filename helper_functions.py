@@ -107,8 +107,8 @@ def finalize_token(reviews, final_stopwords):
     """
     corpus = []
     for review in tqdm(reviews):
-        clean = clean_review(review, final_stopwords)
-        tokens = get_tokens(clean)
+        clean = clean_review(review)
+        tokens = get_tokens(clean, final_stopwords)
         lemmas = lem_words(tokens, lemmatizer)
         corpus.append(lemmas)
     return corpus
