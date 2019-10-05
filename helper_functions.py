@@ -1,4 +1,23 @@
+from collections import Counter
+
 import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
+import seaborn as sns
+
+import nltk
+from nltk.corpus import stopwords
+from nltk import FreqDist, word_tokenize
+from nltk.stem import WordNetLemmatizer 
+
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+import wordcloud
+from wordcloud import WordCloud
+
+import gensim
+from gensim import corpora, models
+from gensim.utils import simple_preprocess
+
+from tqdm import tqdm
 
 
 def remove_reviews(df, column_name, rating_tuple):
