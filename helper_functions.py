@@ -1,3 +1,26 @@
+import matplotlib.pyplot as plt
+
+
+def remove_reviews(df, column_name, rating_tuple):
+    """
+    remove_reviews(df, column_name, rating_tuple)
+    Params:
+        df
+        column_name: name of the column you want to remove
+        rating_tuple: tuple containing the rating and the amount of observations
+                      you wish to drop
+    Returns:
+        This function randomly removes observations and returns a new dataframe 
+    """
+    # extract observations with the same ratings
+    same_ratings_df = df.loc[df[column_name] == rating_tuple[0]]
+    
+    # randomly drop observations from the dataset
+    drop_indices = np.random.choice(same_ratings_df.index, rating_tuple[1], replace=False)
+    df_final = df.drop(drop_indices)
+    return df_final
+
+
 def clean_review(review):
     """
     clean_review(review):
@@ -23,6 +46,7 @@ def clean_review(review):
         joined_clean_review = "".join(clean)
 
     return joined_clean_review
+
 
 def get_tokens(clean_review):
     
@@ -56,6 +80,7 @@ def lem_words(list_of_tokens,lemmatizer):
     # join the individual lemmas into a single string
     return " ".join(wrd_list)
 
+
 def finalize_token(reviews):
     """
     finalize_token(reviews):
@@ -72,6 +97,7 @@ def finalize_token(reviews):
         lemmas = lem_words(tokens,lemmatizer)
         corpus.append(lemmas)
     return corpus
+
 
 def plot_confusion_matrix(cm, classes,
                           normalize=False,
@@ -110,7 +136,8 @@ def plot_confusion_matrix(cm, classes,
     plt.xlabel('Predicted label')
     plt.savefig('confusion')
     
-def plot_AUC_ROC(y_score,fpr,tpr):
+
+    def plot_AUC_ROC(y_score,fpr,tpr):
     sns.set_style("darkgrid", {"axes.facecolor": ".9"})
     print('AUC: {}'.format(auc(fpr, tpr)))
     plt.figure(figsize=(10,8))
@@ -127,6 +154,7 @@ def plot_AUC_ROC(y_score,fpr,tpr):
     plt.title('Receiver operating characteristic (ROC) Curve')
     plt.legend(loc="lower right")
     plt.show()
+
 
 def create_word_clouds(model, n=2, j=5, save=0, start=0, stop=None):
     """
