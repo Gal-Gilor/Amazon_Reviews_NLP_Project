@@ -1,7 +1,6 @@
 from collections import Counter
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
-import seaborn as sns
 import nltk
 from nltk.corpus import stopwords
 from nltk import FreqDist, word_tokenize
