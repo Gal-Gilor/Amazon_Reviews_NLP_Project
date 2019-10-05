@@ -150,7 +150,7 @@ def plot_confusion_matrix(cm, classes,
     plt.savefig('confusion')
     
 
-    def plot_AUC_ROC(y_score,fpr,tpr):
+def plot_AUC_ROC(y_score,fpr,tpr):
     sns.set_style("darkgrid", {"axes.facecolor": ".9"})
     print('AUC: {}'.format(auc(fpr, tpr)))
     plt.figure(figsize=(10,8))
@@ -168,6 +168,30 @@ def plot_confusion_matrix(cm, classes,
     plt.legend(loc="lower right")
     plt.show()
 
+    def plot_roc_curve(model, x_test, y_test):
+    ''' This function accepts the model, testing set, testing labels, and outputs
+        a Receiver Operating Characteristic curve plot'''
+    # extract the target probability
+    predict_proba = model.predict_proba(x_test)[:, 1]
+    fpr, tpr, _ = roc_curve(y_test, predict_proba)
+    
+    # plot the roc curve
+    plt.figure(figsize=(8,5))
+    plt.plot(fpr, tpr, color='darkorange',
+             label='ROC Curve')
+   
+    # plot a line through the origin of axis
+    plt.plot([0, 1], [0, 1], color='navy', linestyle='--')
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    
+    
+    # add graph labels
+    plt.xlabel('False Positive Rate', fontsize=16)
+    plt.ylabel('True Positive Rate', fontsize=16)
+    plt.title('ROC Curve', fontsize=18)
+    plt.legend(loc="lower right")
+    return round(roc_auc_score(y_test, predict_proba), 2)
 
 def create_word_clouds(model, n=2, j=5, save=0, start=0, stop=None):
     """
