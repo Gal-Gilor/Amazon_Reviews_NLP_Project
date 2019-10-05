@@ -1,6 +1,8 @@
+import numpy as np
 from collections import Counter
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
+import seaborn as sns
 import nltk
 from nltk.corpus import stopwords
 from nltk import FreqDist, word_tokenize
@@ -168,7 +170,7 @@ def plot_AUC_ROC(y_score,fpr,tpr):
     plt.legend(loc="lower right")
     plt.show()
 
-    def plot_roc_curve(model, x_test, y_test):
+def plot_roc_curve(model, x_test, y_test):
     ''' This function accepts the model, testing set, testing labels, and outputs
         a Receiver Operating Characteristic curve plot'''
     # extract the target probability
