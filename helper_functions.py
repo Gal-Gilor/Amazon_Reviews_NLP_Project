@@ -13,6 +13,7 @@ from wordcloud import WordCloud
 import gensim
 from gensim import corpora, models
 from gensim.utils import simple_preprocess
+import string
 from tqdm import tqdm
 
 
@@ -96,7 +97,7 @@ def lem_words(list_of_tokens, lemmatizer):
     return " ".join(wrd_list)
 
 
-def finalize_token(reviews, final_stopwords):
+def finalize_token(reviews, final_stopwords, lemmatizer):
     """
     finalize_token(reviews):
     Returns the final corpus of reviews
@@ -112,6 +113,45 @@ def finalize_token(reviews, final_stopwords):
         lemmas = lem_words(tokens, lemmatizer)
         corpus.append(lemmas)
     return corpus
+
+
+def CorrMtx(corr_map_df, dropDuplicates=True, xrot=70, yrot=0, label='Variable'):
+    '''This function accepts a correlation matrix of your data, returns a heat map and save
+       the plot on your device'''
+
+    # exclude duplicate correlations by masking uper right values
+    if dropDuplicates:
+        mask = np.zeros_like(corr_map_df, dtype=np.bool)
+        mask[np.triu_indices_from(mask)] = True
+
+    # set background color / chart style
+    sns.set_style(style='white')
+    fig, ax = plt.subplots(figsize=(12, 10))
+
+    # add diverging colormap from red to blue
+    cmap = sns.diverging_palette(250, 10, as_cmap=True)
+    # add titles
+    plt.title("Correlation Heat Map")
+
+    # draw correlation plot with or without duplicates
+    if dropDuplicates:
+        sns.heatmap(corr_map_df, mask=mask, cmap=cmap,
+                    square=True,
+                    linewidth=.5, cbar_kws={"shrink": .5}, ax=ax)
+        plt.xlabel(label)
+        plt.ylabel(label)
+        plt.xticks(rotation=xrot)
+        plt.yticks(rotation=yrot)
+
+    else:
+        sns.heatmap(corr_map_df, cmap=cmap,
+                    square=True,
+                    linewidth=.5, cbar_kws={"shrink": .5}, ax=ax)
+        plt.xlabel(label)
+        plt.ylabel(label)
+        plt.xticks(rotation=xrot)
+        plt.yticks(rotation=yrot)
+    return
 
 
 def plot_confusion_matrix(cm, classes,
