@@ -12,17 +12,19 @@ This project utilizes natural language processing techniques and algorithms and 
 
 2. What are the most discussed topics in these reviews?
 
-- [Tech Stack](#tech-stack)
+## Table of Contents
 
-- [Process](#process)
+   - [Tech Stack](#tech-stack)
 
-- [Data and EDA](#data-and-eda)
-    
-- [Part 1: Supervised](#part-1-supervised-models)
+   - [Process](#process)
 
-- [Part 2: Unsupervised](#part-2-unsupervised-models)
+   - [Data and EDA](#data-and-eda)
+       
+   - [Part 1: Supervised](#part-1-supervised-models)
 
-- [Future Improvements](#future-improvements)
+   - [Part 2: Unsupervised](#part-2-unsupervised-models)
+
+   - [Future Improvements](#future-improvements)
 
 ## Tech Stack
 
@@ -36,13 +38,15 @@ This project utilizes natural language processing techniques and algorithms and 
 
 ## Process
 
-For this project, we used a Stanford dataset of Amazon product reviews spanning 18 years. We cleaned the data using standard NLP techniques (i.e. removing stop words, lemmatizing, and tokenizing). We then used supervised classification algorithms to classify reviews into rating buckets (1-5). We also used an unsupervised topic modeling algorithm (LDA) to cluster reviews into topics.
+For this project, we used a Stanford dataset of Amazon product reviews spanning 18 years. We cleaned the data using standard NLP techniques (i.e. removing stop words, lemmatizing, and tokenizing). We then used supervised classification algorithms to classify reviews into rating buckets (1-5). Additionally, we used an unsupervised topic modeling algorithm (LDA) to cluster reviews into topics.
   
 ## Data and EDA
 
 The original dataset contained 1.7 million reviews on electronic products sold on Amazon. We dropped 1.2 million to reduce class imbalance across rating buckets, ultimately resulting in ~502,000 observations.
 
-![](/Images/class_imbalance.png) ![](/Images/class_imbalance_fixed.png)
+![Class imbalance bar graph](/Images/class_imbalance.png) 
+
+![Fixed class imbalance bar graph](/Images/class_imbalance_fixed.png)
 
 We completed a number of pre-processing and data cleaning steps including removing punctuation and stop words, making all letters lowercase, and lemmatizing words. Each of these steps was performed so that words could be grouped together based on their lemma and weren't instead treated as individual words.
 
@@ -105,6 +109,6 @@ Every model returned slightly different results. The gensim LDA model created th
 
 1. Optimize text cleaning process
     - Given this was our first time working with NLP techniques, we did not create an optimal pipeline for NLP pre-processing. We tokenized and lemmatized our text before realizing that NLTK's vectorizers take in a corpus of documents, rather than a list of tokens, to create vectors.
-    
+
 2. Use topics derived from LDA in supervised classification algorithms
     - We would have liked to have used the topics derived from the unsupervised learning algorithm, LDA, as classes in a supervised classification model.
