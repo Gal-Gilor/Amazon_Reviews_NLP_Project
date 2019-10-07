@@ -8,12 +8,14 @@ from nltk.corpus import stopwords
 from nltk import FreqDist, word_tokenize
 from nltk.stem import WordNetLemmatizer 
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+from sklearn.metrics import recall_score, accuracy_score, roc_curve, auc, confusion_matrix, roc_auc_score, f1_score
 import wordcloud
 from wordcloud import WordCloud
 import gensim
 from gensim import corpora, models
 from gensim.utils import simple_preprocess
 import string
+import itertools
 from tqdm import tqdm
 
 
@@ -115,10 +117,17 @@ def finalize_token(reviews, final_stopwords, lemmatizer):
     return corpus
 
 
-def CorrMtx(corr_map_df, dropDuplicates=True, xrot=70, yrot=0, label='Variable'):
-    '''This function accepts a correlation matrix of your data, returns a heat map and save
-       the plot on your device'''
-
+def CorrMtx(corr_map_df, dropDuplicates=True, xrot=70, label='Variable', save=False):
+    """
+    CorrMtx(corr_map_df, dropDuplicates=True, xrot=70, yrot=0, label='Variable')
+    Params:
+        corr_map_df: Pandas correlation map
+        dropDuplicates: bool, default = True. Using masking to remove top right side of image
+        xrot: int, default = 70. Assumes some columns have longer names
+        label: string, default = 'Variable'. The x/ylabel title names.
+    Returns:
+        Returns a correlation heat map
+    """
     # exclude duplicate correlations by masking uper right values
     if dropDuplicates:
         mask = np.zeros_like(corr_map_df, dtype=np.bool)
@@ -130,6 +139,7 @@ def CorrMtx(corr_map_df, dropDuplicates=True, xrot=70, yrot=0, label='Variable')
 
     # add diverging colormap from red to blue
     cmap = sns.diverging_palette(250, 10, as_cmap=True)
+    
     # add titles
     plt.title("Correlation Heat Map")
 
@@ -141,7 +151,6 @@ def CorrMtx(corr_map_df, dropDuplicates=True, xrot=70, yrot=0, label='Variable')
         plt.xlabel(label)
         plt.ylabel(label)
         plt.xticks(rotation=xrot)
-        plt.yticks(rotation=yrot)
 
     else:
         sns.heatmap(corr_map_df, cmap=cmap,
@@ -150,90 +159,64 @@ def CorrMtx(corr_map_df, dropDuplicates=True, xrot=70, yrot=0, label='Variable')
         plt.xlabel(label)
         plt.ylabel(label)
         plt.xticks(rotation=xrot)
-        plt.yticks(rotation=yrot)
+    
+    if save:
+        plt.tight_layout()
+        plt.savefight('cm_heatmap.png')
     return
 
 
-def plot_confusion_matrix(cm, classes,
-                          normalize=False,
-                          title='Confusion matrix',
-                          cmap=plt.cm.Blues):
+def plot_confusion_matrix(y_test, y_pred, class_names, save=False, name='name'):
     """
-    plot_confusion_matrix(cm, classes,normalize=False,
-                          title='Confusion matrix',cmap=plt.cm.Blues)
+    plot_confusion_matrix(y_test, y_pred, class_names, save=False, name='name')
+    Params:
+        y_test: list. The true labels
+        y_pred: list. The model's labels
+        class_names: list, the classes names'
+        save: bool, Default = False. Saves the image as png
+        name: string, default = 'name'. The file name if image is saved
+    Returns:
+        Returns confusion matrix plot
+    """
+    from pylab import rcParams
+    rcParams['figure.figsize'] = 10, 10
     
-    """
-    #Add Normalization Option
-    if normalize:
-        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
-        print("Normalized confusion matrix")
-    else:
-        print('Confusion matrix, without normalization')
-
-    print(cm)
-
-    plt.imshow(cm, interpolation='nearest', cmap=cmap)
-    plt.title(title)
+    matrix = confusion_matrix(y_test, y_pred)
+    plt.matshow(matrix, cmap=plt.cm.RdYlBu, aspect=1, alpha=0.6)
+    
+    # add color bar
     plt.colorbar()
-    tick_marks = np.arange(len(classes))
-    plt.xticks(tick_marks, classes)
-    plt.yticks(tick_marks, classes)
+    
+    # add title and Axis Labels
+    plt.title('Confusion Matrix', fontsize=20)
+    plt.ylabel('Actual', fontsize=16)
+    plt.xlabel('Predicted', fontsize=16)
 
-    fmt = '.2f'
-    thresh = cm.max() / 2.
-    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
-        plt.text(j, i, format(cm[i, j], fmt),
+    # add appropriate Axis Scales
+    tick_marks = np.arange(len(class_names))
+    plt.xticks(tick_marks, class_names, rotation=45)
+    plt.yticks(tick_marks, class_names)
+    plt.grid(b=None)
+
+    # add Labels to Each Cell
+    thresh = matrix.max() / 2.  
+
+    # iterate through the confusion matrix and append the labels
+    for i, j in itertools.product(range(matrix.shape[0]), 
+                                  range(matrix.shape[1])):
+        plt.text(j, i, matrix[i, j], 
                  horizontalalignment="center",
-                 color="white" if cm[i, j] > thresh else "black")
+                 color="black")
 
-    plt.tight_layout()
-    plt.ylabel('True label')
-    plt.xlabel('Predicted label')
-    plt.savefig('confusion')
+    # Add a Side Bar Legend Showing Colors
     
+    plt.grid(b=None)
+    if save:
+        plt.grid(b=None)
+        plt.tight_layout()
+        plt.savefig(f'{model}_cm.png')
+    return
 
-def plot_AUC_ROC(y_score,fpr,tpr):
-    sns.set_style("darkgrid", {"axes.facecolor": ".9"})
-    print('AUC: {}'.format(auc(fpr, tpr)))
-    plt.figure(figsize=(10,8))
-    lw = 2
-    plt.plot(fpr, tpr, color='darkorange',
-         lw=lw, label='ROC curve')
-    plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
-    plt.xlim([0.0, 1.0])
-    plt.ylim([0.0, 1.05])
-    plt.yticks([i/20.0 for i in range(21)])
-    plt.xticks([i/20.0 for i in range(21)])
-    plt.xlabel('False Positive Rate')
-    plt.ylabel('True Positive Rate')
-    plt.title('Receiver operating characteristic (ROC) Curve')
-    plt.legend(loc="lower right")
-    plt.show()
-
-def plot_roc_curve(model, x_test, y_test):
-    ''' This function accepts the model, testing set, testing labels, and outputs
-        a Receiver Operating Characteristic curve plot'''
-    # extract the target probability
-    predict_proba = model.predict_proba(x_test)[:, 1]
-    fpr, tpr, _ = roc_curve(y_test, predict_proba)
-    
-    # plot the roc curve
-    plt.figure(figsize=(8,5))
-    plt.plot(fpr, tpr, color='darkorange',
-             label='ROC Curve')
-   
-    # plot a line through the origin of axis
-    plt.plot([0, 1], [0, 1], color='navy', linestyle='--')
-    plt.xlim([0.0, 1.0])
-    plt.ylim([0.0, 1.05])
-    
-    
-    # add graph labels
-    plt.xlabel('False Positive Rate', fontsize=16)
-    plt.ylabel('True Positive Rate', fontsize=16)
-    plt.title('ROC Curve', fontsize=18)
-    plt.legend(loc="lower right")
-    return round(roc_auc_score(y_test, predict_proba), 2)
 
 def create_word_clouds(model, n=2, j=5, save=0, start=0, stop=None):
     """
@@ -311,3 +294,25 @@ def print_topics(model, features, n):
     for i in range(len(top_n)):
         print(f"Topic {i+1} most important words: {top_n[i]}")
     return top_n
+
+
+def print_metrics(labels, predictions, print_score=False):
+    """
+    print_metrics(labels, predictions, print_score=False):
+    Params:
+        labels: list. the actual labels
+        predictions: list, the model predictions
+        print_score: bool, default = False.
+    Returns:
+        given actual labels and the predictions this function prints out the
+        recall, accuracy, and f1 scores.
+    """
+    recall = round(recall_score(labels, predictions, average='micro')*100, 2)
+    acc = round(accuracy_score(labels, predictions)*100, 2)
+    f1 = round(f1_score(labels, predictions, average='micro')*100, 2)
+    
+    if print_score:
+        print(f"Recall: {recall}")
+        print(f"Accuracy: {acc}")
+        print(f"F1 Score: {f1}")
+    return 
