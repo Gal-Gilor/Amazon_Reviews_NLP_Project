@@ -80,8 +80,9 @@ The confusion matrix shows the accuracy of the model across rating buckets. The 
 
 ## Part 2: Unsupervised models
 
-- Topic Modeling with LDA
-    Before running the model we noticed additional processing is needed. We began by removing single character words and all the stand-alone digits. Unsure about the pros and cons of the different libraries for NLP, we utilized both Gensim and scikit-learn to run LDA models for topic modeling.
+### Topic Modeling with LDA
+
+Before running the model we noticed additional    processing is needed. We began by removing single character words and all the stand-alone digits. Unsure about the pros and cons of the different libraries for NLP, we utilized both Gensim and scikit-learn to run LDA models for topic modeling.
 
 - scikit-learn
   1) We chose 14 as the number of topics (Amazon electronics department is made out of 14 sections). Additionally, we filtered out words that appeared in more than 50% of the reviews and words that appeared in less than 10 reviews. Looking at topics, we noticed that some words appear on several topics, meaning the topics are not independent of each other.
