@@ -88,12 +88,10 @@ The confusion matrix shows the accuracy of the model across rating buckets. The 
 
   2) We lowered the number of topics to 10 filtered words that appeared in more than 50% of reviews, and words that appeared in less than 15 reviews. Lowering the number of topics helped address the dependency problem between topics.
 
-<img src=Images/sklearn_lda_14topics.PNG alt="Sckit-learn 14 topics LDA model" width="650"/>
-
+![Sckit-learn 14 topics LDA model](Images/sklearn_lda_14topics.PNG)
 _14 topics LDA model_
 
-<img src=Images/sklearn_lda_bi_10topics.PNG alt="Sckit-learn 10 topics  bi-gram LDA model" width="650"/>
-
+![Sckit-learn 10 topics  bi-gram LDA model](Images/sklearn_lda_bi_10topics.PNG)
 _10 topics LDA model_
 
 - Gensim
