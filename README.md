@@ -44,17 +44,15 @@ For this project, we used a Stanford dataset of Amazon product reviews spanning 
 
 The original dataset contained 1.7 million reviews on electronic products sold on Amazon. We dropped 1.2 million to reduce class imbalance across rating buckets, ultimately resulting in ~502,000 observations.
 
-![Class imbalance bar graph](/Images/class_imbalance.png) 
-
-![Fixed class imbalance bar graph](/Images/class_imbalance_fixed.png)
+![Class imbalance bar graph](Images/class_imbalance.png) ![Fixed class imbalance bar graph](Images/class_imbalance_fixed.png)
 
 We completed a number of pre-processing and data cleaning steps including removing punctuation and stop words, making all letters lowercase, and lemmatizing words. Each of these steps was performed so that words could be grouped together based on their lemma and weren't instead treated as individual words.
 
 As part of our exploration, we looked at the most common words and bigrams in our corpus. Many of the most common words ultimately get removed as stop words or through our vectorization strategy in which we require words to appear in less than 50% of the documents. Interestingly, many of the most common bigrams become key components in the topics produced by the unsupervised LDA model.
 
-![Most common words](/Images/Most_common_words.png) 
+![Most common words](Images/Most_common_words.png) 
 
-![Most common bigrams](/Images/Most_common_bigrams.png)
+![Most common bigrams](Images/Most_common_bigrams.png)
 
 We also engineered a number of features. However, these were ultimately excluded from the models as it became evident that these features had little impact on leading to accurate predictions of ratings.
 
@@ -78,7 +76,7 @@ Here we only discuss our initial and final models. For a look at the additional 
  
 ![](/Images/confusion.png)
 
-The confusion matrix shows the accuracy of the model across rating buckets. The model performed best when predicting ratings of 1 and 5, with 73% and 66% of the observations correctly classified, respectively. This is in line with our expectations, given these are likely to be the reviews with the most polarizing language. Additionally, the model performed worst on reviews with ratings of 2 given we had the fewest observations in this rating bucket. 
+The confusion matrix shows the accuracy of the model across rating buckets. The model performed best when predicting ratings of 1 and 5, with 73% and 66% of the observations correctly classified, respectively. This is in line with our expectations, given these are likely to be the reviews with the most polarizing language. Additionally, the model performed worst on reviews with ratings of 2 given we had the fewest observations in this rating bucket.
 
 ## Part 2: Unsupervised models
 
