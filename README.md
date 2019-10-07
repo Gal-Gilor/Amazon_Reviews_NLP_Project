@@ -12,7 +12,7 @@ This project utilizes natural language processing techniques and algorithms and 
 
 2. What are the most discussed topics in these reviews?
 
-## Table of Contents
+### Table of Contents
 
    - [Tech Stack](#tech-stack)
 
