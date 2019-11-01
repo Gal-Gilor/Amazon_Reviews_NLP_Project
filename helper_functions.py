@@ -18,6 +18,8 @@ import string
 import itertools
 from tqdm import tqdm
 
+plt.rcParams['axes.spines.right'] = False
+plt.rcParams['axes.spines.top'] = False
 
 def remove_reviews(df, column_name, rating_tuple):
     """
@@ -135,7 +137,7 @@ def CorrMtx(corr_map_df, dropDuplicates=True, xrot=70, label='Variable', save=Fa
 
     # set background color / chart style
     sns.set_style(style='white')
-    fig, ax = plt.subplots(figsize=(12, 10))
+    fig, ax = plt.subplots(figsize=(10, 10))
 
     # add diverging colormap from red to blue
     cmap = sns.diverging_palette(250, 10, as_cmap=True)
@@ -163,6 +165,7 @@ def CorrMtx(corr_map_df, dropDuplicates=True, xrot=70, label='Variable', save=Fa
     if save:
         plt.tight_layout()
         plt.savefight('cm_heatmap.png')
+    plt.show()
     return
 
 
@@ -178,11 +181,13 @@ def plot_confusion_matrix(y_test, y_pred, class_names, save=False, name='name'):
     Returns:
         Returns confusion matrix plot
     """
-    from pylab import rcParams
-    rcParams['figure.figsize'] = 10, 10
+    plt.rcParams["axes.grid"] = False
+    plt.rcParams['figure.figsize'] = 10, 10
+    plt.rcParams['axes.spines.right'] = True
+    plt.rcParams['axes.spines.top'] = True
     
     matrix = confusion_matrix(y_test, y_pred)
-    plt.matshow(matrix, cmap=plt.cm.RdYlBu, aspect=1, alpha=0.6)
+    plt.matshow(matrix, cmap=plt.cm.Blues, aspect=1.2, alpha=0.6)
     
     # add color bar
     plt.colorbar()
@@ -191,12 +196,6 @@ def plot_confusion_matrix(y_test, y_pred, class_names, save=False, name='name'):
     plt.title('Confusion Matrix', fontsize=20)
     plt.ylabel('Actual', fontsize=16)
     plt.xlabel('Predicted', fontsize=16)
-
-    # add appropriate Axis Scales
-    tick_marks = np.arange(len(class_names))
-    plt.xticks(tick_marks, class_names, rotation=45)
-    plt.yticks(tick_marks, class_names)
-    plt.grid(b=None)
 
     # add Labels to Each Cell
     thresh = matrix.max() / 2.  
@@ -208,11 +207,7 @@ def plot_confusion_matrix(y_test, y_pred, class_names, save=False, name='name'):
                  horizontalalignment="center",
                  color="black")
 
-    # Add a Side Bar Legend Showing Colors
-    
-    plt.grid(b=None)
     if save:
-        plt.grid(b=None)
         plt.tight_layout()
         plt.savefig(f'{model}_cm.png')
     return

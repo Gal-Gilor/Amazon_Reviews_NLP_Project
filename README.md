@@ -68,13 +68,13 @@ Here we only discuss our initial and final models. For a look at the additional 
    - The Dummy Classifier acheieved an accuracy score of 20%, given our data is distributed across 5 rating categories.
 
 2. Multinomial Naive Bayes
-   - The Multinomial Naive Bayes model was able to achieve the highest accuracy score of 47%
+   - The Multinomial Naive Bayes model was able to achieve the highest accuracy score of 46.5%
    - We used NLTK's TF-IDF vectorizer with the following parameters:
-      - A maximum of 10,000 features
-      - Each word was required to appear in a minimum of 2 reviews
+      - A maximum of 2500 features
+      - Each word was required to appear in a minimum of 15 reviews
       - Each word was required to appear in no more than 50% of the reviews
  
-![](/Images/confusion.png)
+![Confusion Matrix](/Images/confusion.png)
 
 The confusion matrix shows the accuracy of the model across rating buckets. The model performed best when predicting ratings of 1 and 5, with 73% and 66% of the observations correctly classified, respectively. This is in line with our expectations, given these are likely to be the reviews with the most polarizing language. Additionally, the model performed worst on reviews with ratings of 2 given we had the fewest observations in this rating bucket.
 
@@ -82,7 +82,7 @@ The confusion matrix shows the accuracy of the model across rating buckets. The 
 
 ### Topic Modeling with LDA
 
-Before running the model we noticed additional    processing is needed. We began by removing single character words and all the stand-alone digits. Unsure about the pros and cons of the different libraries for NLP, we utilized both Gensim and scikit-learn to run LDA models for topic modeling.
+Before running the model we noticed additional processing is needed. We began by removing single character words and all the stand-alone digits. Unsure about the pros and cons of the different libraries for NLP, we utilized both Gensim and scikit-learn to run LDA models for topic modeling.
 
 - scikit-learn
   1) We chose 14 as the number of topics (Amazon electronics department is made out of 14 sections). Additionally, we filtered out words that appeared in more than 50% of the reviews and words that appeared in less than 10 reviews. Looking at topics, we noticed that some words appear on several topics, meaning the topics are not independent of each other.
@@ -106,6 +106,7 @@ Every model returned slightly different results. The gensim LDA model created th
 
 1. Optimize text cleaning process
     - Given this was our first time working with NLP techniques, we did not create an optimal pipeline for NLP pre-processing. We tokenized and lemmatized our text before realizing that NLTK's vectorizers take in a corpus of documents, rather than a list of tokens, to create vectors.
+    - Due to time constraints, we could not fine tune the model to return only distinct topics
 
 2. Use topics derived from LDA in supervised classification algorithms
     - We would have liked to have used the topics derived from the unsupervised learning algorithm, LDA, as classes in a supervised classification model.
