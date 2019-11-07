@@ -62,13 +62,13 @@ We also engineered a number of features. However, these were ultimately excluded
 
 ## Part 1: Supervised models
 
-Here we only discuss our initial and final models. For a look at the additional models we tested, please see the python notebook titled Supervised_Models.
+Here we only discuss our the dummy and most accurate model. For a look at the additional models we tested, please see the python notebook titled Supervised_Models.
 
 1. Dummy Classifier:
    - The Dummy Classifier acheieved an accuracy score of 20%, given our data is distributed across 5 rating categories.
 
 2. Multinomial Naive Bayes
-   - The Multinomial Naive Bayes model was able to achieve the highest accuracy score of 46.5%
+   - The Multinomial Naive Bayes model was able to achieve the highest accuracy score of 46.5% (26.5% better than random guess)
    - We used NLTK's TF-IDF vectorizer with the following parameters:
       - A maximum of 2500 features
       - Each word was required to appear in a minimum of 15 reviews
